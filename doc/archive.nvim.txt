@@ -65,7 +65,7 @@ Using lazy.nvim: >
 ==============================================================================
 4. CONFIGURATION                                      *archive-configuration*
 
-Setup function:                                           *archive.setup()*
+Setup function:
 
     require('archive').setup({opts})
 

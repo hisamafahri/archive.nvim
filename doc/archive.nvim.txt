@@ -1,0 +1,162 @@
+*archive.nvim.txt*    Archive.nvim - Markdown note management with wikilinks
+
+Author: Hisam Fahri <https://github.com/hisamafahri>
+License: MIT License
+
+==============================================================================
+CONTENTS                                                   *archive-contents*
+
+    1. Introduction .......................... |archive-introduction|
+    2. Requirements .......................... |archive-requirements|
+    3. Installation .......................... |archive-installation|
+    4. Configuration ......................... |archive-configuration|
+    5. Commands .............................. |archive-commands|
+    6. Functions ............................. |archive-functions|
+    7. Usage ................................. |archive-usage|
+    8. Troubleshooting ....................... |archive-troubleshooting|
+
+==============================================================================
+1. INTRODUCTION                                        *archive-introduction*
+
+Archive.nvim is a Neovim plugin for creating and managing markdown notes with
+wikilink support and intelligent autocomplete. Heavily inspired by The Archive
+app.
+
+Features:
+- Create timestamped markdown notes with unique IDs
+- Wikilink autocomplete with nvim-cmp integration  
+- Navigate between notes using wikilinks ([[Note Title]]) and markdown 
+  syntax links ([text](url))
+- Automatic note creation
+- Open URLs in default browser
+
+==============================================================================
+2. REQUIREMENTS                                        *archive-requirements*
+
+- ripgrep (required for file searching)
+- nvim-cmp (optional, for autocomplete)
+
+==============================================================================
+3. INSTALLATION                                        *archive-installation*
+
+Using vim-plug: >
+    Plug 'hisamafahri/archive.nvim'
+<
+
+Using dein.vim: >
+    call dein#add('hisamafahri/archive.nvim')
+<
+
+Using packer.nvim: >
+    use 'hisamafahri/archive.nvim'
+<
+
+Using lazy.nvim: >
+    {
+      'hisamafahri/archive.nvim',
+      config = function()
+        require('archive').setup({
+          workspace = '~/notes' -- Required: path to your notes directory
+        })
+      end
+    }
+<
+
+==============================================================================
+4. CONFIGURATION                                      *archive-configuration*
+
+Setup function:                                           *archive.setup()*
+
+    require('archive').setup({opts})
+
+Parameters: ~
+    {opts} (table) Configuration options:
+        - workspace (string): Required. Path to notes directory.
+
+Basic setup: >
+    require('archive').setup({
+      workspace = '~/notes' -- Required: path to your notes directory
+    })
+<
+
+With nvim-cmp integration: >
+    -- Setup archive.nvim
+    require('archive').setup({
+      workspace = '~/notes'
+    })
+    
+    -- Add to your nvim-cmp sources
+    require('cmp').setup({
+      sources = {
+        { name = 'archive_wikilink' },
+        -- your other sources...
+      }
+    })
+<
+
+==============================================================================
+5. COMMANDS                                                *archive-commands*
+
+:Archive {subcommand}                                           *:Archive*
+
+Available subcommands:
+
+:Archive new                                              *:Archive-new*
+    Create a new note with user input title.
+
+:Archive go_to_link                                 *:Archive-go_to_link*
+    Navigate to link under cursor.
+
+==============================================================================
+6. FUNCTIONS                                              *archive-functions*
+
+archive.new()                                                *archive.new()*
+    Creates a new note with user input for the title.
+
+archive.go_to_link()                                  *archive.go_to_link()*
+    Navigates to the link under the cursor.
+
+archive.get_cmp_source()                          *archive.get_cmp_source()*
+    Returns the nvim-cmp completion source for wikilink autocomplete.
+
+archive.setup({opts})                                      *archive.setup()*
+    Initializes the plugin with the given configuration options.
+    See |archive-configuration| for details.
+
+==============================================================================
+7. USAGE                                                      *archive-usage*
+
+Available Commands: ~
+    :Archive new        - Create a new note with user input title
+    :Archive go_to_link - Navigate to link under cursor
+
+Keybindings: ~
+    Add these to your Neovim configuration: >
+    
+    -- Create new note
+    vim.keymap.set('n', '<leader>an', ':Archive new<CR>', 
+                   { desc = 'Create new note' })
+    
+    -- Navigate to link under cursor
+    vim.keymap.set('n', '<leader>ag', ':Archive go_to_link<CR>', 
+                   { desc = 'Go to link under cursor' })
+<
+
+==============================================================================
+8. TROUBLESHOOTING                                *archive-troubleshooting*
+
+No autocomplete suggestions: ~
+- Ensure ripgrep is installed and in PATH
+- Verify nvim-cmp is configured with archive_wikilink source
+- Check workspace path exists and contains .md files
+
+"No link found under cursor": ~
+- Position cursor on link text, not brackets  
+- Verify link syntax is correct
+
+File not found when following wikilinks: ~
+- Verify workspace path is correct
+- Ensure markdown files exist in workspace
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:

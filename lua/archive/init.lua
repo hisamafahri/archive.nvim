@@ -86,7 +86,16 @@ local function get_link_under_cursor()
 			break
 		end
 		if col >= wikilink_start and col <= wikilink_end then
-			return "wikilink", content
+			-- Check if content contains alias separator |
+			local pipe_pos = content:find("|")
+			if pipe_pos then
+				-- Extract the link part (before |) for navigation
+				local link_part = content:sub(1, pipe_pos - 1)
+				return "wikilink", link_part
+			else
+				-- No alias, use the whole content
+				return "wikilink", content
+			end
 		end
 		start_pos = wikilink_end + 1
 	end
